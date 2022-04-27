@@ -1,5 +1,16 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+  <CreditCard />
 </template>
+
+<script>
+import CreditCard from "@/components/CreditCard.vue";
+export default {
+  name: "CreditCardView",
+  components: {
+    CreditCard,
+  },
+};
+</script>
+
+<style>
+</style>
