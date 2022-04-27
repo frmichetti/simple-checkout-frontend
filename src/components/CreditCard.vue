@@ -90,28 +90,37 @@
           </div>
         </div>
       </div>
-      <form class="form" autocomplete="off" novalidate>
+      <form
+        class="form"
+        autocomplete="off"
+        novalidate
+        @submit.prevent="onSubmit"
+      >
         <fieldset>
           <label for="card-number">Número do Cartão</label>
           <input
+            v-model="payment.card_number1"
             type="num"
             id="card-number"
             class="input-cart-number"
             maxlength="4"
           />
           <input
+            v-model="payment.card_number2"
             type="num"
             id="card-number-1"
             class="input-cart-number"
             maxlength="4"
           />
           <input
+            v-model="payment.card_number3"
             type="num"
             id="card-number-2"
             class="input-cart-number"
             maxlength="4"
           />
           <input
+            v-model="payment.card_number4"
             type="num"
             id="card-number-3"
             class="input-cart-number"
@@ -120,12 +129,19 @@
         </fieldset>
         <fieldset>
           <label for="card-holder">Nome (igual o do cartão)</label>
-          <input type="text" id="card-holder" />
+          <input
+            v-model="payment.card_holder_name"
+            type="text"
+            id="card-holder"
+          />
         </fieldset>
         <fieldset class="fieldset-expiration">
           <label for="card-expiration-month">Válido até</label>
           <div class="select">
-            <select id="card-expiration-month">
+            <select
+              v-model="payment.card_expiration_month"
+              id="card-expiration-month"
+            >
               <option></option>
               <option>01</option>
               <option>02</option>
@@ -142,14 +158,11 @@
             </select>
           </div>
           <div class="select">
-            <select id="card-expiration-year">
+            <select
+              v-model="payment.card_expiration_year"
+              id="card-expiration-year"
+            >
               <option></option>
-              <option>2016</option>
-              <option>2017</option>
-              <option>2018</option>
-              <option>2019</option>
-              <option>2020</option>
-              <option>2021</option>
               <option>2022</option>
               <option>2023</option>
               <option>2024</option>
@@ -159,30 +172,107 @@
         </fieldset>
         <fieldset class="fieldset-ccv">
           <label for="card-ccv">CCV</label>
-          <input type="text" id="card-ccv" maxlength="3" />
+          <input
+            v-model="payment.card_cvv"
+            type="text"
+            id="card-ccv"
+            maxlength="3"
+          />
         </fieldset>
-        <button class="btn"><i class="fa fa-lock"></i> Pagar</button>
+        <button class="btn" type="submit">
+          <i class="fa fa-lock"></i> Pagar
+        </button>
       </form>
     </div>
-
-
   </div>
 </template>
 
 <script>
 import $ from "jquery";
+import axios from "axios";
+import { useToast } from "vue-toastification";
+
 export default {
   name: "CreditCard",
   props: {},
+  setup() {
+    // Get toast interface
+    const toast = useToast();
+
+    // Make it available inside methods
+    return { toast };
+  },
+  data() {
+    return {
+      decrypted: {},
+      payment: {
+        card_number1: "",
+        card_number2: "",
+        card_number3: "",
+        card_number4: "",
+        card_cvv: "",
+        card_expiration_month: "",
+        card_expiration_year: "",
+        card_holder_name: "",
+      },
+    };
+  },
+  created() {
+    if (this.$route.query.hash) {
+      const decrypted = atob(this.$route.query.hash);
+
+      const object = JSON.parse(decrypted);
+
+      this.decrypted = object;
+    }
+  },
+  methods: {
+    async onSubmit() {
+      console.log(this.decrypted);
+
+      const ammount = this.decrypted.cart.reduce((acc, e) => {
+        return e.unit_price * e.quantity + acc;
+      }, 0);      
+
+      const payload = {
+        payment_method: "credit_card",
+        amount: ammount,
+        card_number: `${this.payment.card_number1}${this.payment.card_number2}${this.payment.card_number3}${this.payment.card_number4}`,
+        card_cvv: this.payment.card_cvv,
+        card_expiration_date: `${
+          this.payment.card_expiration_month
+        }${this.payment.card_expiration_year.substring(2)}`,
+        card_holder_name: this.payment.card_holder_name,
+        customer: {
+          id: 869031,
+          name: `${this.decrypted.customer.name} ${this.decrypted.customer.lastName}`,
+          type: "individual",
+          email: this.decrypted.customer.email,
+        },
+        items: this.decrypted.cart,
+      };
+
+      try {
+        const response = await axios.post("http://localhost:8000/pay", payload);
+        console.log(response);
+        useToast().success(response.data.acquirer_response_message)
+      } catch (error) {
+        console.error(error);
+        useToast().error(error.message)
+      }
+
+      
+    },
+  },
 };
 
 let $t, m, y;
 
 $(function () {
   // Handler for .ready() called.
-  
+
   $(".input-cart-number").on("keyup change", function () {
-    $t = $(this);    
+    $t = $(this);
 
     if ($t.val().length > 3) {
       $t.next().focus();
@@ -472,8 +562,8 @@ Credit Card
       height: 100%;
       top: 0;
       left: 0;
-      background: url("https://www.flaticon.com/br/icone-gratis/terra_44386") no-repeat
-        center;
+      background: url("https://www.flaticon.com/br/icone-gratis/terra_44386")
+        no-repeat center;
       background-size: cover;
       opacity: 0.05;
     }

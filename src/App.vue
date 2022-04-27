@@ -1,9 +1,10 @@
 <template>
-  <nav>
+<div></div>
+  <!--<nav>
     <router-link to="/cart">Carrinho</router-link> |
     <router-link to="/payment">Pagamento</router-link>
-  </nav>
-  <router-view/>
+  </nav> -->
+  <router-view/> 
 </template>
 
 <style lang="scss">

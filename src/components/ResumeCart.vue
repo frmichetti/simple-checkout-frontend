@@ -13,51 +13,74 @@
         <div class="col-md-4 order-md-2 mb-4">
           <h4 class="d-flex justify-content-between align-items-center mb-3">
             <span class="text-muted">Seu Carrinho</span>
-            <span class="badge badge-secondary badge-pill">3</span>
+            <span class="badge badge-secondary badge-pill">{{
+              cart.length || 3
+            }}</span>
           </h4>
           <ul class="list-group mb-3">
-            <li
-              class="
-                list-group-item
-                d-flex
-                justify-content-between
-                lh-condensed
-              "
-            >
-              <div>
-                <h6 class="my-0">Product name</h6>
-                <small class="text-muted">Brief description</small>
-              </div>
-              <span class="text-muted">R$ 12,00</span>
-            </li>
-            <li
-              class="
-                list-group-item
-                d-flex
-                justify-content-between
-                lh-condensed
-              "
-            >
-              <div>
-                <h6 class="my-0">Second product</h6>
-                <small class="text-muted">Brief description</small>
-              </div>
-              <span class="text-muted">R$ 8,00</span>
-            </li>
-            <li
-              class="
-                list-group-item
-                d-flex
-                justify-content-between
-                lh-condensed
-              "
-            >
-              <div>
-                <h6 class="my-0">Third item</h6>
-                <small class="text-muted">Brief description</small>
-              </div>
-              <span class="text-muted">R$ 5,00</span>
-            </li>
+            <div v-if="cart.length > 0">
+              <li
+                v-for="(item, index) in cart"
+                :key="index"
+                class="
+                  list-group-item
+                  d-flex
+                  justify-content-between
+                  lh-condensed
+                "
+              >
+                <div>
+                  <h6 class="my-0">{{ item.title }}</h6>
+                  <small class="text-muted">{{ item.description }}</small>
+                </div>
+                <span class="text-muted">R$ {{ item.unit_price / 100 }}</span>
+              </li>
+            </div>
+            <div v-else>
+              <li
+                class="
+                  list-group-item
+                  d-flex
+                  justify-content-between
+                  lh-condensed
+                "
+              >
+                <div>
+                  <h6 class="my-0">Product name</h6>
+                  <small class="text-muted">Brief description</small>
+                </div>
+                <span class="text-muted">R$ 12,00</span>
+              </li>
+              <li
+                class="
+                  list-group-item
+                  d-flex
+                  justify-content-between
+                  lh-condensed
+                "
+              >
+                <div>
+                  <h6 class="my-0">Second product</h6>
+                  <small class="text-muted">Brief description</small>
+                </div>
+                <span class="text-muted">R$ 8,00</span>
+              </li>
+              <li
+                class="
+                  list-group-item
+                  d-flex
+                  justify-content-between
+                  lh-condensed
+                "
+              >
+                <div>
+                  <h6 class="my-0">Third item</h6>
+                  <small class="text-muted">Brief description</small>
+                </div>
+                <span class="text-muted">R$ 5,00</span>
+              </li>
+            </div>
+            <!--
             <li class="list-group-item d-flex justify-content-between bg-light">
               <div class="text-success">
                 <h6 class="my-0">Cupom de desconto</h6>
@@ -68,7 +91,7 @@
             <li class="list-group-item d-flex justify-content-between">
               <span>Total (BRL)</span>
               <strong>R$ 20,00</strong>
-            </li>
+            </li> -->
           </ul>
 
           <form class="card p-2">
@@ -95,13 +118,13 @@
           <form class="needs-validation" novalidate @submit.stop.prevent>
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label for="firstName" >Nome</label>
+                <label for="firstName">Nome</label>
                 <input
                   v-model="customer.name"
                   type="text"
                   class="form-control"
                   id="firstName"
-                  placeholder="Nome"                  
+                  placeholder="Nome"
                   required
                 />
                 <div class="invalid-feedback">
@@ -115,7 +138,7 @@
                   type="text"
                   class="form-control"
                   id="lastName"
-                  placeholder="Sobrenome"                  
+                  placeholder="Sobrenome"
                   required
                 />
                 <div class="invalid-feedback">
@@ -163,7 +186,7 @@
             <div class="mb-3">
               <label for="address">Endereço</label>
               <input
-              v-model="customer.shipinfo.address"
+                v-model="customer.shipinfo.address"
                 type="text"
                 class="form-control"
                 id="address"
@@ -208,7 +231,10 @@
                 <label for="state">Estado</label>
                 <select
                   v-model="customer.shipinfo.state"
-                 class="custom-select d-block w-100" id="state" required>
+                  class="custom-select d-block w-100"
+                  id="state"
+                  required
+                >
                   <option value="">Escolha...</option>
                   <option>Sao Paulo</option>
                 </select>
@@ -219,7 +245,7 @@
               <div class="col-md-3 mb-3">
                 <label for="zip">Cep</label>
                 <input
-                v-model="customer.shipinfo.zipCode"
+                  v-model="customer.shipinfo.zipCode"
                   type="text"
                   class="form-control"
                   id="zip"
@@ -244,7 +270,7 @@
       </div>
 
       <footer class="my-5 pt-5 text-muted text-center text-small">
-        <p class="mb-1">&copy; 2017-2019 Company Name</p>
+        <p class="mb-1">&copy; 2015-2022 Spatial Architects</p>
         <ul class="list-inline">
           <li class="list-inline-item"><a href="#">Privacy</a></li>
           <li class="list-inline-item"><a href="#">Terms</a></li>
@@ -279,9 +305,9 @@ export default {
   },
   created() {
     if (this.$route.query.hash) {
-      const decrypted = atob(this.$route.query.hash)     
+      const decrypted = atob(this.$route.query.hash);
 
-      const object = JSON.parse(decrypted)      
+      const object = JSON.parse(decrypted);
 
       this.code = object.code;
       this.customer.name = object.customer.name;
@@ -293,8 +319,17 @@ export default {
       this.customer.shipinfo.country = object.customer.shipinfo.country;
       this.customer.shipinfo.state = object.customer.shipinfo.state;
       this.customer.shipinfo.zipCode = object.customer.shipinfo.zipCode;
-      
-    }
+
+      object.cart.forEach((e) => {
+        this.cart.push({
+          id: e.id,
+          title: e.title,
+          unit_price: e.unit_price,
+          quantity: e.quantity,
+          tangible: e.tangible,
+        });
+      });
+    }    
   },
   methods: {
     validate(code) {
@@ -316,7 +351,7 @@ export default {
             zipCode: this.customer.shipinfo.zipCode,
           },
         },
-        cart: this.customer.cart,
+        cart: this.cart,
       };
 
       const hash = btoa(JSON.stringify(payload));
