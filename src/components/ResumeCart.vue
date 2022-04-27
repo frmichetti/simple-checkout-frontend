@@ -5,7 +5,7 @@
       <div class="py-5 text-center">
         <h2>Resumo da compra</h2>
         <p class="lead">
-          Confira os parâmetros abaixo e modifique caso seja necessário
+          Confira os dados abaixo e modifique caso seja necessário
         </p>
       </div>
 
@@ -95,13 +95,13 @@
           <form class="needs-validation" novalidate @submit.stop.prevent>
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label for="firstName">Nome</label>
+                <label for="firstName" >Nome</label>
                 <input
+                  v-model="customer.name"
                   type="text"
                   class="form-control"
                   id="firstName"
-                  placeholder=""
-                  value=""
+                  placeholder="Nome"                  
                   required
                 />
                 <div class="invalid-feedback">
@@ -111,11 +111,11 @@
               <div class="col-md-6 mb-3">
                 <label for="lastName">Sobrenome</label>
                 <input
+                  v-model="customer.lastName"
                   type="text"
                   class="form-control"
                   id="lastName"
-                  placeholder=""
-                  value=""
+                  placeholder="Sobrenome"                  
                   required
                 />
                 <div class="invalid-feedback">
@@ -131,6 +131,7 @@
                   <span class="input-group-text">#</span>
                 </div>
                 <input
+                  v-model="customer.whatsApp"
                   type="text"
                   class="form-control"
                   id="whatsapp"
@@ -148,6 +149,7 @@
                 >Email <span class="text-muted">(Opcional)</span></label
               >
               <input
+                v-model="customer.email"
                 type="email"
                 class="form-control"
                 id="email"
@@ -161,6 +163,7 @@
             <div class="mb-3">
               <label for="address">Endereço</label>
               <input
+              v-model="customer.shipinfo.address"
                 type="text"
                 class="form-control"
                 id="address"
@@ -177,6 +180,7 @@
                 >Complemento <span class="text-muted">(Opcional)</span></label
               >
               <input
+                v-model="customer.shipinfo.address2"
                 type="text"
                 class="form-control"
                 id="address2"
@@ -188,6 +192,7 @@
               <div class="col-md-5 mb-3">
                 <label for="country">País</label>
                 <select
+                  v-model="customer.shipinfo.country"
                   class="custom-select d-block w-100"
                   id="country"
                   required
@@ -201,9 +206,11 @@
               </div>
               <div class="col-md-4 mb-3">
                 <label for="state">Estado</label>
-                <select class="custom-select d-block w-100" id="state" required>
+                <select
+                  v-model="customer.shipinfo.state"
+                 class="custom-select d-block w-100" id="state" required>
                   <option value="">Escolha...</option>
-                  <option>São Paulo</option>
+                  <option>Sao Paulo</option>
                 </select>
                 <div class="invalid-feedback">
                   Favor informar um estado válido
@@ -212,6 +219,7 @@
               <div class="col-md-3 mb-3">
                 <label for="zip">Cep</label>
                 <input
+                v-model="customer.shipinfo.zipCode"
                   type="text"
                   class="form-control"
                   id="zip"
@@ -269,7 +277,25 @@ export default {
       cart: [],
     };
   },
-  created() {},
+  created() {
+    if (this.$route.query.hash) {
+      const decrypted = atob(this.$route.query.hash)     
+
+      const object = JSON.parse(decrypted)      
+
+      this.code = object.code;
+      this.customer.name = object.customer.name;
+      this.customer.lastName = object.customer.lastName;
+      this.customer.whatsApp = object.customer.whatsApp;
+      this.customer.email = object.customer.email;
+      this.customer.shipinfo.address = object.customer.shipinfo.address;
+      this.customer.shipinfo.address2 = object.customer.shipinfo.address2;
+      this.customer.shipinfo.country = object.customer.shipinfo.country;
+      this.customer.shipinfo.state = object.customer.shipinfo.state;
+      this.customer.shipinfo.zipCode = object.customer.shipinfo.zipCode;
+      
+    }
+  },
   methods: {
     validate(code) {
       console.log(code);
