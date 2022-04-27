@@ -165,15 +165,7 @@
       </form>
     </div>
 
-    <a
-      class="the-most"
-      target="_blank"
-      href="https://codepen.io/2016/popular/pens/9/"
-    >
-      <img
-        src="https://raw.githubusercontent.com/supahfunk/supah-codepen/master/themost-2016.png"
-      />
-    </a>
+
   </div>
 </template>
 
@@ -190,9 +182,7 @@ $(function () {
   // Handler for .ready() called.
   
   $(".input-cart-number").on("keyup change", function () {
-    $t = $(this);
-
-    debugger;
+    $t = $(this);    
 
     if ($t.val().length > 3) {
       $t.next().focus();
