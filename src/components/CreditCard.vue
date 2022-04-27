@@ -1,6 +1,6 @@
 <template>
   <div class="payment">
-    <h1>Credit Card</h1>
+    <h1>Pagamento com Cartão de Crédito</h1>
 
     <div class="checkout">
       <div class="credit-card-box">
@@ -472,7 +472,7 @@ Credit Card
       height: 100%;
       top: 0;
       left: 0;
-      background: url("http://cdn.flaticon.com/svg/44/44386.svg") no-repeat
+      background: url("https://www.flaticon.com/br/icone-gratis/terra_44386") no-repeat
         center;
       background-size: cover;
       opacity: 0.05;
