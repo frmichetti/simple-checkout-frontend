@@ -5,7 +5,7 @@
 <script>
 import CreditCard from "@/components/CreditCard.vue";
 export default {
-  name: "CreditCardView",
+  name: "PaymentView",
   components: {
     CreditCard,
   },

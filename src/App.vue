@@ -1,7 +1,7 @@
 <template>
   <nav>
-    <router-link to="/">Resumo</router-link> |
-    <router-link to="/about">Pagar</router-link>
+    <router-link to="/cart">Carrinho</router-link> |
+    <router-link to="/payment">Pagamento</router-link>
   </nav>
   <router-view/>
 </template>

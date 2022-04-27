@@ -92,7 +92,7 @@
       </div>
       <form class="form" autocomplete="off" novalidate>
         <fieldset>
-          <label for="card-number">Card Number</label>
+          <label for="card-number">Número do Cartão</label>
           <input
             type="num"
             id="card-number"
@@ -119,11 +119,11 @@
           />
         </fieldset>
         <fieldset>
-          <label for="card-holder">Card holder</label>
+          <label for="card-holder">Nome (igual o do cartão)</label>
           <input type="text" id="card-holder" />
         </fieldset>
         <fieldset class="fieldset-expiration">
-          <label for="card-expiration-month">Expiration date</label>
+          <label for="card-expiration-month">Válido até</label>
           <div class="select">
             <select id="card-expiration-month">
               <option></option>
@@ -161,7 +161,7 @@
           <label for="card-ccv">CCV</label>
           <input type="text" id="card-ccv" maxlength="3" />
         </fieldset>
-        <button class="btn"><i class="fa fa-lock"></i> submit</button>
+        <button class="btn"><i class="fa fa-lock"></i> Pagar</button>
       </form>
     </div>
 
