@@ -1,6 +1,5 @@
 <template>
-  <div class="payment">
-    <h1>Pagamento com Cartão de Crédito</h1>
+  <div class="payment"> 
 
     <div class="checkout">
       <div class="credit-card-box">
@@ -227,11 +226,10 @@ export default {
     }
   },
   methods: {
-    async onSubmit() {      
-
+    async onSubmit() {
       const ammount = this.decrypted.cart.reduce((acc, e) => {
         return e.unit_price * e.quantity + acc;
-      }, 0);      
+      }, 0);
 
       const payload = {
         payment_method: "credit_card",
@@ -252,14 +250,22 @@ export default {
       };
 
       try {
-        const response = await axios.post("https://pagarme-micro.herokuapp.com/pay", payload);        
-        useToast().success(response.data.acquirer_response_message)
+        // "https://pagarme-micro.herokuapp.com/pay"
+        const response = await axios.post(
+          'http://localhost:4000/pay',
+          payload
+        );
+        useToast().success(response.data.acquirer_response_message);
+
+        payload.idTransaction = response.data.authorization_code
+
+        const hash = btoa(JSON.stringify(payload));
+
+        this.$router.replace({ path: "/receipt", query: { hash } });
       } catch (error) {
         console.error(error);
-        useToast().error(error.message)
+        useToast().error(error.message);
       }
-
-      
     },
   },
 };
@@ -358,7 +364,7 @@ $('#card-number').change(function(){
 html,
 body {
   min-height: 100%;
-  font-family: "Open Sans", sans-serif;
+  font-family: "Open Sans", sans-serif;  
 }
 body {
   background: linear-gradient(50deg, #f3c680, hsla(179, 54%, 76%, 1));
