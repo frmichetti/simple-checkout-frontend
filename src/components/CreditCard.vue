@@ -250,9 +250,9 @@ export default {
       };
 
       try {
-        // "https://pagarme-micro.herokuapp.com/pay"
+        
         const response = await axios.post(
-          'http://localhost:4000/pay',
+          "https://pagarme-micro.herokuapp.com/pay",
           payload
         );
         useToast().success(response.data.acquirer_response_message);
