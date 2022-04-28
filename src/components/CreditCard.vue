@@ -227,8 +227,7 @@ export default {
     }
   },
   methods: {
-    async onSubmit() {
-      console.log(this.decrypted);
+    async onSubmit() {      
 
       const ammount = this.decrypted.cart.reduce((acc, e) => {
         return e.unit_price * e.quantity + acc;
@@ -253,8 +252,7 @@ export default {
       };
 
       try {
-        const response = await axios.post("http://localhost:8000/pay", payload);
-        console.log(response);
+        const response = await axios.post("https://pagarme-micro.herokuapp.com/pay", payload);        
         useToast().success(response.data.acquirer_response_message)
       } catch (error) {
         console.error(error);

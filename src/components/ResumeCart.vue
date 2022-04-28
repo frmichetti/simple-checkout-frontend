@@ -332,8 +332,8 @@ export default {
     }    
   },
   methods: {
-    validate(code) {
-      console.log(code);
+    validate() {
+      
     },
     goToPayment() {
       const payload = {
