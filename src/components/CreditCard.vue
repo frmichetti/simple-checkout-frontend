@@ -255,13 +255,19 @@ export default {
           "https://pagarme-micro.herokuapp.com/pay",
           payload
         );
-        useToast().success(response.data.acquirer_response_message);
 
-        payload.idTransaction = response.data.authorization_code
+        if(response.data.status == "paid"){
+          useToast().success(response.data.acquirer_response_message);
+          payload.idTransaction = response.data.authorization_code
 
-        const hash = btoa(JSON.stringify(payload));
+          const hash = btoa(JSON.stringify(payload));
 
-        this.$router.replace({ path: "/receipt", query: { hash } });
+          this.$router.replace({ path: "/receipt", query: { hash } });
+        } else{
+          useToast().warning(response.data.acquirer_response_message)
+        }   
+
+        
       } catch (error) {
         console.error(error);
         useToast().error(error.message);
